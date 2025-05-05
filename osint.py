@@ -18,6 +18,35 @@ class DedektifUygulama(QWidget):
         self.setWindowIcon(QIcon('icon.ico'))
         self.initUI()
         
-    
+    def initUI(self):
+        main_layout = QVBoxLayout()
+
+        user_input_group = QGroupBox("Kullanıcı Adı Ara (Virgülle ayırarak birden fazla arayabilirisiniz.")
+        user_input_group.setStyleSheet("""
+        QGroupBox {
+        border: 2px solid #8f8f91;
+        border-radius: 10px;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        }
+        QGroupBox::title {
+        subcontrol-origin: margin;
+        subcontrol-position: top center;
+        padding: 0 10px;
+        font-size: 14pt;
+        font-weight: bold;
+        color: #333;
+        }
+        """)
+        user_input_layout = QVBoxLayout()
+        self.label = QLabel("Kullanıcı Adı Girin:")
+        self.label.setFont(QFont('Arial',12,QFont.Bold))
+        self.label.setStyleSheet("color: #333;")
+
+        self.username_input = QLineEdit()
+        self.username_input.setPlaceholderText(
+            "Kullanıcı adlarını virgülle ayırarak girin (örnek: kullanıcı1, kullanıcı2)"
+        )
 
 
