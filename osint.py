@@ -50,3 +50,34 @@ class DedektifUygulama(QWidget):
         )
 
 
+        self.username_input.setFont(QFont('Arial',11))
+        self.username_input.returnPressed.connect(self.search_username)
+        self.username_input.setStyleSheet("""
+        background-color: #fff;
+        border: 2px solid #ccc;
+        padding: 10px;
+        border-radius: 8px;
+        color: #333;
+        """)
+
+        user_input_layout.addWidget(self.label)
+        user_input_layout.addWidget(self.username_input)
+        user_input_group.setLayout(user_input_layout)
+
+        category_layout = QHBoxLayout()
+
+        self.category_label = QLabel("Kategori Seçimi:")
+        self.category_label.setFont(QFont('Arial',12,QFont.Bold))
+        self.category_label.setStyleSheet("color: #333;")
+
+        self.category_selector = QComboBox()
+        self.category_selector.addItems([
+            "Hepsi","Sosyal Medya", "Forumlar", "Video Platformları"
+        ])
+        self.category_selector.setFont(QFont('Arial',12))
+        self.category_selector.setStyleSheet("""background-color: #fff;
+        border: 2px solid #ccc;
+        padding: 5px;
+                                             border-radius: 8px;
+        color: #333;
+        """)
