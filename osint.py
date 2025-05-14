@@ -81,3 +81,44 @@ class DedektifUygulama(QWidget):
                                              border-radius: 8px;
         color: #333;
         """)
+        category_layout.addWidget(self.category_label)
+        category_layout.addWidget(self.category_selector)
+
+        button_layout = QHBoxLayout()
+
+        self.search_button = QPushButton("Ara")
+        self.search_button.setFont(QFont('Arial',12))
+        self.search_button.clicked.connect(self.search_username)
+        self.search_button.setStyleSheet("""
+        QPushButton{
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: bold;
+        border: none;
+        }
+        QPushButton:hover{
+        background-color: #45a049;
+        }
+        """)
+        #self.search_button.clicked.connect()
+
+        self.save_button = QPushButton("Sonuçları Kaydet")
+        self.save_button.setFont(QFont('Arial', 12))
+        self.save_button.clicked.connect(self.save_results)
+        self.save_button.setStyleSheet("""
+        QPushButton{
+        background-color: #008CBA;
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: bold;
+        border: none;
+        }
+        QPushButton:hover{
+        background-color: #007bb5;
+        }
+        """)
+        button_layout.addWidget(self.search_button)
+        button_layout.addWidget(self.save_button)
