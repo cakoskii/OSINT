@@ -122,3 +122,35 @@ class DedektifUygulama(QWidget):
         """)
         button_layout.addWidget(self.search_button)
         button_layout.addWidget(self.save_button)
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setMaximum(100)
+        self.progress_bar.setValue(0)
+        self.progress_bar.setStyleSheet("""
+        QProgressBar{
+        border: 2px solid #8f8f91;
+        border-radius: 5px;
+        background: #e0e0e0;
+        }
+        QProgressBar::chunk{
+        background-color: #4CAF50;
+        width:20px
+        }
+        """)
+
+        self.result_area = QTextBrowser()
+        self.result_area.setFont(QFont('Arial',11))
+        self.result_area.setStyleSheet("""
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 15px;
+        border: 2px solid #ccc;
+        color: #333;
+        """)
+        self.result_area.setOpenExternalLinks(True)
+        self.result_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+
+        main_layout.addWidget(user_input_group)
+        main_layout.addLayout(category_layout)
+        main_layout.addLayout(button_layout)
+        main_layout.addWidget(self.progress_bar)
+        main_layout.addWidget(self.result_area)
