@@ -154,3 +154,88 @@ class DedektifUygulama(QWidget):
         main_layout.addLayout(button_layout)
         main_layout.addWidget(self.progress_bar)
         main_layout.addWidget(self.result_area)
+
+        self.setLayout(main_layout)
+        self.setFixedSize(600,500)
+        self.username_input.setFocus()
+        self.results=[]
+    def search_username(self):
+        usernames = self.username_input.text().split(',')
+        if not usernames[0]:
+            QMessageBox.warning(self,"Hata","Lütfen en az bir kullanıcı adı girin.")
+            return
+        self.result_area.clear()
+        self.results=[]
+        self.progress_bar.setValue(0)
+
+        selected_category = self.category_selector.currentText()
+
+        for username in usernames:
+            username = username.strip()
+            if username:
+                self.result_area.append(
+                    f"'{username}' kullanıcısı aranıyor...\n"
+                )
+                asyncio.run(self.run_search(username, selected_category))
+    async def run_search(self, username, category):
+        sites = [
+            {"name": "GitHub", "url": f"https://api.github.com/users/{username}", "api": True, "category": "Hepsi"},
+            {"name": "Reddit", "url": f"https://www.reddit.com/user/{username}", "api": False, "category": "Forumlar"},
+            {"name": "Instagram", "url": f"https://www.instagram.com/{username}/", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "Twitter", "url": f"https://twitter.com/{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "LinkedIn", "url": f"https://www.linkedin.com/in/{username}/", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "9GAG", "url": f"https://9gag.com/u/{username}", "api": False, "category": "Forumlar"},
+            {"name": "1337x", "url": f"https://1337x.to/user/{username}/", "api": False, "category": "Forumlar"},
+            {"name": "Twitch", "url": f"https://www.twitch.tv/{username}", "api": False,
+             "category": "Video Platformları"},
+            {"name": "Pinterest", "url": f"https://www.pinterest.com/{username}/", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "Discord", "url": f"https://discord.com/users/{username}", "api": False, "ssl_verify": False,
+             "category": "Sosyal Medya"},
+            {"name": "Facebook", "url": f"https://www.facebook.com/{username}", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "YouTube", "url": f"https://www.youtube.com/{username}", "api": False,
+             "category": "Video Platformları"},
+            {"name": "Tumblr", "url": f"https://{username}.tumblr.com/", "api": False, "category": "Sosyal Medya"},
+            {"name": "Flickr", "url": f"https://www.flickr.com/people/{username}/", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "SoundCloud", "url": f"https://soundcloud.com/{username}", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "Steam", "url": f"https://steamcommunity.com/id/{username}", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "DeviantArt", "url": f"https://www.deviantart.com/{username}", "api": False, "ssl_verify": False,
+             "category": "Forumlar"},
+            {"name": "VK", "url": f"https://vk.com/{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "Medium", "url": f"https://medium.com/@{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "StackOverflow", "url": f"https://stackoverflow.com/users/{username}", "api": False,
+             "category": "Forumlar"},
+            {"name": "HackerNews", "url": f"https://news.ycombinator.com/user?id={username}", "api": False,
+             "category": "Forumlar"},
+            {"name": "Vimeo", "url": f"https://vimeo.com/{username}", "api": False, "category": "Video Platformları"},
+            {"name": "TikTok", "url": f"https://www.tiktok.com/@{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "MyAnimeList", "url": f"https://myanimelist.net/profile/{username}", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "Dribbble", "url": f"https://dribbble.com/{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "Behance", "url": f"https://www.behance.net/{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "Foursquare", "url": f"https://foursquare.com/{username}", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "Dailymotion", "url": f"https://www.dailymotion.com/{username}", "api": False,
+             "category": "Video Platformları"},
+            {"name": "Slack", "url": f"https://{username}.slack.com", "api": False, "category": "Sosyal Medya"},
+            {"name": "Unsplash", "url": f"https://unsplash.com/@{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "ProductHunt", "url": f"https://www.producthunt.com/@{username}", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "Telegram", "url": f"https://t.me/{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "Snapchat", "url": f"https://www.snapchat.com/add/{username}", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "Quora", "url": f"https://www.quora.com/profile/{username}", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "X", "url": f"https://x.com/{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "OK.ru", "url": f"https://ok.ru/{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "Weibo", "url": f"https://weibo.com/{username}", "api": False, "category": "Sosyal Medya"},
+            {"name": "Douyin", "url": f"https://www.douyin.com/user/{username}", "api": False,
+             "category": "Sosyal Medya"},
+            {"name": "Baidu", "url": f"https://www.baidu.com/s?wd={username}", "api": False, "category": "Sosyal Medya"}
+        ]
