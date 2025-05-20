@@ -239,3 +239,24 @@ class DedektifUygulama(QWidget):
              "category": "Sosyal Medya"},
             {"name": "Baidu", "url": f"https://www.baidu.com/s?wd={username}", "api": False, "category": "Sosyal Medya"}
         ]
+
+        if category !="Hepsi":
+            sites = [site for site in sites if site['category'] == category]
+        total_sites = len(sites)
+        tasks = []
+        async with aiohttp.ClientSession() as session:
+            for index, site in enumerate(sites):
+                if not site.get("ssl_verify",True):
+                    ssl_context = ssl.create_default_context()
+                    ssl_context.check_hostname = False
+                    ssl_context.verify_mode = ssl.CERT_NONE
+                    tasks.append(self.search_website(username, site, session, ssl_context))
+                else:
+                    if site['api']:
+                        tasks.append(self.search_api(username,site,session))
+                    else:
+                        tasks.append(self.search_website(username,site,session))
+                progress = int(((index + 1)/total_sites)*100)
+                self.progress_bar.setValue(progress)
+
+            results = await asyncio.gather(*tasks)
