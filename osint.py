@@ -260,3 +260,25 @@ class DedektifUygulama(QWidget):
                 self.progress_bar.setValue(progress)
 
             results = await asyncio.gather(*tasks)
+            
+        for result in results:
+            self.result_area.append(result)
+            self.result_area.moveCursor(QTextCursor.Start)
+            self.results.append(result)
+        QMessageBox.information(self,"Bilgi","Arama Tamamlandı!")
+    async def search_api(self,username,site,session):
+        try:
+            async with session.get(site['url']) as response:
+                if response.status ==200:
+                    data = await response.json()
+                    profile_url = data.get("html_url")
+                    if profile_url:
+                        return self.format_result(username,site['name'],profile_url,True)
+                    else:
+                        return self.format_result(username, site['name'], site['url'], True)
+                else:
+                    return self.format_result(username,site['name'],site['url'],False)
+        except Exception as e:
+            return f"{site['name']} üzerinde hata: {str(e)}"
+    async def search_website(self,username, site, session, ssl_context=None):
+
