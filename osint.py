@@ -281,4 +281,21 @@ class DedektifUygulama(QWidget):
         except Exception as e:
             return f"{site['name']} üzerinde hata: {str(e)}"
     async def search_website(self,username, site, session, ssl_context=None):
+        try:
+            async with session.get(site["url"], ssl=ssl_context) as response:
+                if response.status == 200:
+                    return self.format_result(username, site["name"], site["url"], True)
+                else:
+                    return self.format_result(username, site["name"], site["url"], False)
+        except Exception as e:
+            return f'{site["name"]} üzerinde hata: {str(e)}'
+    def format_result(self,username,site_name,url,found):
+        if found:
+            icon = "✔️"
+            link = f'<a href="{url}" style="text-decoration:none; color:#4CAF50;">{username} {site_name} üzerinde bulundu {icon}</a>'
+            return f'<div>{link}</div>'
+        else:
+            icon = "❌"
+            return f'<div style="color:#f44336;">{username} {site_name} üzerinde bulunamadı {icon}'
+    def save_results(self):
 
