@@ -298,4 +298,16 @@ class DedektifUygulama(QWidget):
             icon = "❌"
             return f'<div style="color:#f44336;">{username} {site_name} üzerinde bulunamadı {icon}'
     def save_results(self):
+        options = QFileDialog.Options()
+        filename, _ = QFileDialog.getSaveFileName(self, "Sonuçları Kaydet","","Text Files (*.txt)",options=options)
+        if filename:
+            if filename.endswith('.txt'):
+                with open(filename,'w',encoding='utf-8') as file:
+                    file.write(self.result_area.toPlainText())
+                    QMessageBox.information(self,"Bilgi","Kayıt Tamamlandı!")
+if __name__ =='__main__':
+    app = QApplication(sys.argv)
+    dedektif = DedektifUygulama()
+    dedektif.show()
+    sys.exit(app.exec_())
 
